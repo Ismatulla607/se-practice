@@ -1,0 +1,51 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Student {
+  - studentId: String
+  - name: String
+  - email: String
+  + viewAvailability(): List<Room>
+  + bookRoom(room: Room, startTime: DateTime, duration: Duration): Booking
+  + cancelBooking(booking: Booking): void
+}
+
+class Administrator {
+  - adminId: String
+  - name: String
+  + blockRoom(room: Room): void
+  + unblockRoom(room: Room): void
+  + reviewUsageReport(): Report
+}
+
+class Room {
+  - roomId: String
+  - roomName: String
+  - isBlocked: Boolean
+  + isAvailable(startTime: DateTime, duration: Duration): Boolean
+  + setBlockedStatus(status: Boolean): void
+}
+
+class Booking {
+  - bookingId: String
+  - startTime: DateTime
+  - durationMinutes: Integer
+  - status: BookingStatus
+  - confirmationCode: String
+  + cancel(): void
+  + generateConfirmation(): String
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+Student "1" -- "0..*" Booking : creates / manages >
+Room "1" -- "0..*" Booking : reserved for <
+
+note right of Booking
+  R2: active bookings for the same room must not overlap.
+end note
+
+@enduml

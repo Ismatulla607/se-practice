@@ -1,0 +1,32 @@
+@startuml
+skinparam ActivityFontSize 12
+skinparam ActivityBorderColor #2B2D42
+skinparam ActivityBackgroundColor #F8F9FA
+skinparam ArrowColor #2B2D42
+
+start
+
+:Student requests room booking
+(Room, Start Time, Duration);
+
+if (Is duration > 0 AND <= 2 hours AND Start Time is in future?) then (yes [R1 Pass])
+  if (Is the requested room currently blocked?) then (yes [R3 Blocked])
+    :Reject booking (Room is blocked);
+    stop
+  else (no [R3 Pass])
+    if (Does booking overlap with an existing active booking?) then (yes [R2 Overlap])
+      :Reject booking (Room already booked);
+      stop
+    else (no [R2 Pass])
+      :Create booking record;
+      :Generate confirmation code;
+      :Display booking confirmation [R4];
+      stop
+    endif
+  endif
+else (no [R1 Fail])
+  :Reject booking (Invalid time range or duration);
+  stop
+endif
+
+@enduml
