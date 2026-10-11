@@ -1,0 +1,38 @@
+schema: 1
+week: "03"
+
+student:
+  name: "Ismatulla Dulat"
+  student_id: "24B031734"
+  github: "Ismatulla607"
+
+assistant:
+  tool: "ChatGPT"
+  model: "GPT-4o"
+
+counts:
+  user_stories: 6
+  acceptance_criteria_sets: 3
+
+checker:
+  pass: 23
+  fail: 0
+  error: 0
+  commit: "e1c33a5"
+
+assumptions:
+  overlap_touching_bookings: "allowed"
+  exactly_two_hours: "allowed"
+
+traceability:
+  use_cases_not_covered: []
+  stories_not_traced: []
+
+review_findings:
+  - "US-07 in the AI output invented a notification mechanism (SMS/push), which the scenario lists as out of scope — I deleted it and folded the confirmation into UC-06"
+  - "The AI drew Student → Send confirmation (UC-06) in the PlantUML diagram, but no person triggers UC-06 — it is a system response to Book/Cancel, so I removed that association"
+  - "None of the AI's stories settled the two open questions (touching bookings under R3, exactly two hours under R2) — I added both decisions as assumptions in US-02 and AC-05"
+
+honesty:
+  can_explain_everything_submitted: "yes"
+  ai_usage_disclosed: "yes"

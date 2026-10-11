@@ -1,0 +1,54 @@
+@startuml
+left to right direction
+actor Student
+actor Administrator
+
+package "Smart Campus Study Room Booking" {
+    usecase "View Room Availability" as UC1
+    usecase "Book a Study Room" as UC2
+    usecase "Receive Booking Confirmation" as UC3
+    usecase "Cancel Own Booking" as UC4
+    usecase "Block a Room" as UC5
+    usecase "Unblock a Room" as UC6
+    usecase "Review Room Usage" as UC7
+
+    Student -- UC1
+    Student -- UC2
+    UC2 ..> UC3 : <<include>>
+    Student -- UC4
+
+    Administrator -- UC5
+    Administrator -- UC6
+    Administrator -- UC7
+}
+
+note right of UC2
+    **Justification for Association:**
+    Student initiates 'Book a Study Room' goal.
+    **Rules Applied:**
+    R1 (Future, duration 0-2 hours),
+    R2 (Non-overlapping),
+    R3 (Blocked room check).
+end note
+
+note right of UC3
+    **Reason for Include:**
+    Booking confirmation is an integral and expected outcome of a *successful* booking process (as per R4).
+    The system automatically handles this after UC2 succeeds.
+end note
+
+note right of UC4
+    **Justification for Association:**
+    Student is the only one who can cancel their own booking.
+    **Rules Applied:** R2 (Room is released).
+end note
+
+note bottom
+    **Assumptions:**
+    - Only logged-in students/administrators can perform their respective actions.
+    - System maintains accurate, real-time data for rooms and bookings.
+    - Administrators have authority to block/unblock rooms.
+    - Users have appropriate interfaces (e.g., mobile app, web portal) to interact with the system.
+end note
+
+@enduml

@@ -1,0 +1,42 @@
+schema: 1
+week: "04"
+
+student:
+  name: Ismatulla Dulat
+  student_id: 24B031734
+  github: Ismatulla607
+
+assistant:
+  tool: Gemini
+  model: gemini-3.6-flash
+
+counts:
+  behaviour_diagram: activity
+  stories_source: reference
+  use_cases: 7
+  change_log_rows: 3
+
+checker:
+  pass: 35
+  fail: 0
+  error: 0
+  commit: 76db759
+  kept_fails: []
+
+assumptions:
+  overlap_touching_bookings: not-allowed
+  blocking_a_booked_room: keep-bookings
+
+traceability:
+  use_cases_not_traced: []
+  rules_not_shown: []
+
+review_findings:
+  - Student was linked to Receive Booking Confirmation, violating R4.
+  - Book a Study Room include had no why comment, violating README section 4 notation rules.
+  - No note on Booking stating R2 no-overlap rule.
+
+honesty:
+  originals_unedited: yes
+  can_explain_everything_submitted: yes
+  ai_usage_disclosed: yes
