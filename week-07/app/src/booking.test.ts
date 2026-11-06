@@ -191,4 +191,29 @@ describe('canBook validation and booking logic', () => {
     });
     expect(result).toBe(false);
   });
+
+  test('X3 - request overlaps the second of multiple bookings', () => {
+    const result = canBook({
+      start: 720,
+      end: 750,
+      now: 540,
+      blocked: false,
+      bookings: [
+        { start: 600, end: 660 },
+        { start: 735, end: 780 },
+      ],
+    });
+    expect(result).toBe(false);
+  });
+
+  test('X4 - reversed existing booking does not overlap 660–720', () => {
+    const result = canBook({
+      start: 660,
+      end: 720,
+      now: 540,
+      blocked: false,
+      bookings: [{ start: 700, end: 650 }],
+    });
+    expect(result).toBe(true);
+  });
 });
