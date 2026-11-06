@@ -49,23 +49,23 @@ for every test. **The Expected column comes from AC1–AC4, never from the code.
 
 | ID | Candidate / changed input | Expected | AC | Reason (in your words) |
 | --- | --- | --- | --- | --- |
-| T01 | 660–720 (touching after) | true | AC4 | |
-| T02 | 540–570 (starts now) | false | AC1 | |
-| T03 | 720–720 (zero duration) | false | AC1 | |
-| T04 | 750–720 (reversed) | false | AC1 | |
-| T05 | 1380–1441 (past day end) | false | AC1 | |
-| T06 | 720–840 (120 minutes) | true | AC2 | |
-| T07 | 720–841 (121 minutes) | false | AC2 | |
-| T08 | 570–600 (touching before) | true | AC4 | |
-| T09 | 630–690 (partial overlap) | false | AC4 | |
-| T10 | 570–690 (contains booking) | false | AC4 | |
-| T11 | 615–645 (inside booking) | false | AC4 | |
-| T12 | 600–660 (identical interval) | false | AC4 | |
-| T13 | 660–720, blocked = true | false | AC3 | |
-| T14 | 630–690, bookings = [] | true | AC4 | |
-| AC5 | an Available request — the bookings after the call equal the bookings before | true, data unchanged | AC5 | |
-| X1 | | | | |
-| X2 | | | | |
+| T01 | 660–720 (touching after) | true | AC4 | The new booking starts exactly when the existing booking ends, so there is no overlap. |
+| T02 | 540–570 (starts now) | false | AC1 | The start time must be later than the current time, not equal to it. |
+| T03 | 720–720 (zero duration) | false | AC1 | A booking must have a positive duration because start must be less than end. |
+| T04 | 750–720 (reversed) | false | AC1 | The end time is earlier than the start time, so the interval is invalid. |
+| T05 | 1380–1441 (past day end) | false | AC1 | The end time exceeds 1440 minutes, which is outside the allowed day. |
+| T06 | 720–840 (120 minutes) | true | AC2 | A booking lasting exactly 120 minutes is allowed and does not overlap another booking. |
+| T07 | 720–841 (121 minutes) | false | AC2 | The duration exceeds the maximum allowed limit of 120 minutes. |
+| T08 | 570–600 (touching before) | true | AC4 | The new booking ends exactly when the existing booking starts, so there is no overlap. |
+| T09 | 630–690 (partial overlap) | false | AC4 | The requested interval overlaps the existing booking from 630 to 660. |
+| T10 | 570–690 (contains booking) | false | AC4 | The requested interval completely contains the existing booking. |
+| T11 | 615–645 (inside booking) | false | AC4 | The requested interval is completely inside an existing booking. |
+| T12 | 600–660 (identical interval) | false | AC4 | The requested interval is identical to an existing booking, so it conflicts. |
+| T13 | 660–720, blocked = true | false | AC3 | A blocked room cannot be booked even when the requested time is free. |
+| T14 | 630–690, bookings = [] | true | AC4 | There are no existing bookings, so the requested time does not conflict with anything. |
+| AC5 | 660–720, compare bookings before and after | true, data unchanged | AC5 | Checking availability must not add, remove or modify any existing bookings. |
+| X1 | 1320–1440 | true | AC1 | Ending exactly at midnight is valid because 1440 is the maximum allowed end time. |
+| X2 | 0–60, now = 540 | false | AC1 | The requested booking starts before the current time and must be rejected. |
 
 X1 and X2 are **your own two cases**: a boundary or a state that T01–T14 do not reach. Fill all
 five columns.
