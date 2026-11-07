@@ -1,0 +1,62 @@
+# week-07/submission.yml — your declaration for this lab.
+#
+# Facts only. Every explanation goes in lab-report.md; nothing here repeats prose.
+# Fill every value. Check it before you push:
+#
+#     python tests/validate_submission.py
+#
+# The validator checks shape, never quality. A green run is the floor, not the grade.
+# If you cannot run Python, fill the file by hand against the comments — a malformed
+# file costs you nothing if the content is there.
+
+schema: 1
+week: "07"
+
+student:
+  name: "Ismatulla Dulat"
+  student_id: "24B031734"
+  github: "Ismatulla607"
+
+assistant:
+  tool: "Gemini"
+  model: "Gemini 3"
+
+project:
+  baseline: "starter"
+  bolt_url: "not-shared"
+  vitest: "2.1.9"
+
+counts:
+  tests_first: 17
+  tests_final: 19
+  first_run_failed: 0
+  review_decisions: 3
+  mutants_detected: 3
+
+checker:
+  pass: 33
+  fail: 0
+  error: 0
+  commit: "aba1ecc"
+  known_fails: []
+
+assumptions:
+  # No AC says what canBook does when an EXISTING booking is reversed: {start: 700, end: 650}.
+  # Call your function with that booking and a 660-720 request, write down what it returns,
+  # and defend it in lab-report.md §9.3. Any answer is acceptable. Not checking is not.
+  invalid_existing_booking: "returns-true"
+
+review_findings:
+  # Three or more. One line each, and each one names what it is about: a case (T01-T14, X1, X2),
+  # an AC, a mutant (M1-M3), or a file.
+  # Worthless:        "The AI tests were mostly fine"
+  # Worth everything: "T06: the first suite expected 720-840 to be rejected, but AC2 allows exactly 120 minutes"
+  - "T06: an exactly 120-minute request is allowed by AC2."
+  - "T01 and T08: touching endpoints must remain available under AC4."
+  - "T14: an empty bookings list does not check conflicts with a later entry; X3 adds that coverage."
+
+honesty:
+  first_suite_unedited: "yes"
+  outputs_unedited: "yes"
+  mutants_restored: "yes"
+  ai_usage_disclosed: "yes"
