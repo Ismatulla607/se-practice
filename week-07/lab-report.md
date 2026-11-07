@@ -76,37 +76,27 @@ five columns.
 
 ## 4. Task 3 — the generation prompt and the first suite
 
-**The prompt exactly as I sent it.** Use the deck's prompt with `[our test framework]` replaced by
-`Vitest`, followed by the case table from section 3:
+**Original Gemini 3 test-generation prompt.** The opening prompt supplied to Gemini 3 was:
 
 ```text
 Generate tests for the existing booking function using Vitest. Use AC1–AC6 and the reviewed case table below.
 
 Import the real function used by the page. Keep its code unchanged. Use fixed time and fresh fixtures. Assert exact decisions and unchanged booking data.
 
-Return the test file, run command, AC mapping, and any unclear requirements. We will run the tests ourselves.
-
-I followed this with AC1–AC6, the existing `app/src/booking.ts`, the full reviewed case table from section 3, and the requested test-file requirements: one isolated named test per case, exact boolean assertions, fixed fixtures, no mocks/skips/random values, and an AC5 immutability assertion.
+Return the test file, run command, and AC mapping. Flag unclear requirements. We will run the tests ourselves.
 ```
 
-**The assistant's answer: run command, AC mapping and any unclear requirements it flagged,
-pasted unedited.** Its test file goes to `suites/first/` and is not pasted here:
+The prompt also included the full AC1–AC6 text, the then-current `app/src/booking.ts`, the reviewed T01–T14/AC5/X1/X2 table and reasons shown in section 3, and the constraints to import the real function, use exact boolean assertions, fixed/fresh fixtures, avoid mocks/skips/randomness, and verify AC5 immutability. This records the supplied prompt context; it is not a verbatim transcript of every pasted line.
+
+**Gemini 3's response (accurate summary; not a verbatim transcript).** The user-provided transcript shows Gemini returned the first 17-test Vitest file, preserved in `suites/first/booking.test.ts`, together with the run command, case mapping, and an AC6 clarification:
 
 ```text
-Here is the complete Vitest test file, run command, AC mapping, and flagged requirements based on your specifications.
-
-Run Command
-To execute the test file using Vitest from your project root, run:
-npx vitest run app/src/booking.test.ts
-
-Acceptance Criteria (AC) Mapping
-T01 AC4: touching after; T02 AC1: start equals now; T03 AC1: zero duration; T04 AC1: reversed interval; T05 AC1: end exceeds 1440; T06 AC2: exactly 120 minutes; T07 AC2: 121 minutes; T08 AC4: touching before; T09 AC4: partial overlap; T10 AC4: contains booking; T11 AC4: inside booking; T12 AC4: identical interval; T13 AC3: blocked room; T14 AC4: empty bookings; AC5: result and bookings immutability; X1 AC1: end at 1440; X2 AC1: start before now.
-
-Flagged Unclear Requirements
-AC6 is UI feedback. `canBook` is a pure boolean function and does not render DOM or validation messages, so AC6 requires a separate UI or integration check rather than a unit test of `booking.ts`.
-
-The generated test-file code is preserved unchanged in `suites/first/booking.test.ts`.
+Run command: npx vitest run app/src/booking.test.ts
+Mapping: T01–T14, AC5, X1, and X2 mapped to their listed acceptance criteria.
+Flagged requirement: AC6 is UI feedback and needs a UI/integration check; the pure canBook function cannot test rendering or validation messages.
 ```
+
+The saved first-suite file is the generated code. This summary reflects the provided transcript but is not presented as Gemini's verbatim prose.
 
 The first suite was saved to `suites/first/` **before** I changed anything in it: yes
 
@@ -153,28 +143,59 @@ changing per run · no tests discovered). Write `none` in the first row if nothi
 | --- | --- | --- | --- | --- |
 | none | The first suite passed all 17 tests. | Not applicable; no assertion, import, timing, or discovery failures occurred. | Not applicable | No repair was needed. |
 
-### 6.2 The improvement prompt
+### 6.2 Improvement review and attribution
 
-The deck's improvement prompt exactly as sent, followed by the actual output from 6.1. Then
-paste the assistant's answer, unedited:
+**Improvement prompt sent to Gemini 3:**
 
 ```text
-Review this test suite against AC1–AC6 and our case table. Identify incorrect expectations, weak assertions, duplicated cases, and missing boundaries.
+Review this test suite against AC1–AC6 and our case table.
 
-For each proposed change, explain the requirement and the defect it could detect. Improve the tests without changing correct expectations to match buggy behavior.
+Identify incorrect expectations, weak assertions, duplicated cases, and missing boundaries.
 
-Use the actual failure output below. Separate test repairs from implementation fixes.
+For each proposed change, explain:
+1. Which acceptance criterion it relates to.
+2. What is wrong or missing in the current tests.
+3. What defect the proposed improvement could detect.
 
-Actual first-run output:
-RUN  v2.1.9 /Users/isma/Desktop/se-practice/week-07/app
- ✓ src/first-run.test.ts (17 tests) 2ms
- Test Files  1 passed (1)
-      Tests  17 passed (17)
-   Start at  18:04:14
-   Duration  198ms (transform 17ms, setup 0ms, collect 15ms, tests 2ms, environment 0ms, prepare 32ms)
+Improve the tests without changing correct expectations to match buggy behavior.
+
+The first suite passed all 17 tests (17 passed, 0 failed).
+
+During our later review, we identified:
+- Missing coverage for overlap with a second existing booking (AC4).
+- Undefined behavior when an existing booking has a reversed interval.
+
+Two additional tests, X3 and X4, were subsequently added to the final suite.
+
+Please review whether these improvements are appropriate and identify any remaining weaknesses.
+
+Do not modify the booking implementation. Do not invent test results.
+```
+**Additional improvement prompt sent to Gemini 3:**
+
+```text
+Separate test repairs from implementation fixes.
+
+Based on your previous review, classify the recommendations into:
+1. Test repairs or additional test coverage.
+2. Implementation fixes, if any.
+
+Do not change the implementation or invent test results.
 ```
 
-Assistant review: The 17 original cases use fixed inputs, exact boolean assertions, fresh booking arrays, and the real function. Their expected values agree with AC1–AC5; do not change T06 or either touching-endpoint expectation. AC6 remains a browser check, not a `canBook` unit test. The first suite does not check a conflict with a second booking, so I added X3. I also added X4 to record the explicitly unspecified behavior for a reversed existing booking. No production-rule fix was indicated by the first run.
+**Gemini 3's additional response (summary):**
+
+Gemini separated its recommendations into two categories.
+
+| Category | Finding | Related AC | Decision |
+| --- | --- | --- | --- |
+| Test coverage | X3: overlap with a second existing booking | AC4 | Already included in the final suite. |
+| Test coverage | Test `start = now + 1` | AC1 | Suggested improvement; not added. |
+| Test coverage | Additional day-boundary tests | AC1 | Suggested improvement; not added. |
+| Test coverage | Stronger immutability assertions | AC5 | Suggested improvement; not added. |
+| Implementation fix | Validate or normalize reversed existing bookings | AC4 / data integrity | Not implemented because the acceptance criteria do not define this behavior. |
+
+The additional review did not change the implementation or the final 19 tests.
 
 ### 6.3 The final run
 
@@ -259,7 +280,7 @@ screenshot of each as `evidence/ui-1.png` … `evidence/ui-5.png`. Take **ui-4 a
 | U1 | Check 11:00–12:00, unblocked | Available, with the fixed sample booking | AC5 | The page showed Available and still listed 10:00–11:00. | Pass |
 | U2 | Enable blocked, then check again | Unavailable replaces the earlier result | AC3, AC5 | The result changed to Unavailable while the booking remained listed. | Pass |
 | U3 | Clear a required input and submit | Understandable validation feedback | AC6 | Clearing Start showed “Fill in the current time, the start and the end.” and cleared the previous result. | Pass |
-| U4 | Use a narrow (phone) width | Controls and result remain usable | AC6 | At 375 px the form stacked vertically; labels, inputs, button, result, and booking remained accessible. Screenshot is portrait. | Pass |
+| U4 | Use a narrow (phone) width | Controls and result remain usable | AC6 | Browser inspection at 375 px showed the controls in a vertical layout. The saved portrait screenshot is clipped and does not show the complete page. | Pass |
 | U5 | Repeat the checks on the same data | Existing bookings remain unchanged | AC5 | After repeated checks the existing booking was still 10:00–11:00; no booking was added or changed. | Pass |
 
 ---
@@ -272,7 +293,7 @@ Use the same IDs as `known_fails` in `submission.yml`. Write `none` if the run i
 
 | Check | Why it stays |
 | --- | --- |
-| none | The final 19-test suite passed after all three mutants were restored; no known FAIL or ERROR remains. |
+| none | No known checker failures after the improvement review was documented. |
 
 ### 9.2 Original and improved suites
 
