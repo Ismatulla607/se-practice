@@ -14,13 +14,13 @@
 
 | Item | Value |
 | --- | --- |
-| Assistant (tool) | (write here) |
-| Assistant model | (write here) |
-| Starting point | (write here) |
-| Baseline commit | (write here) |
-| Language (ts or js) | (write here) |
-| Vitest version | (write here) |
-| Where I ran the tests | (write here) |
+| Assistant (tool) | ChatGPT |
+| Assistant model | GPT-6 |
+| Starting point | Week 07 |
+| Baseline commit | 01900fe |
+| Language (ts or js) | TypeScript |
+| Vitest version | 19/19 passed |
+| Where I ran the tests | Successful |
 
 ### 1.1 Baseline run
 
@@ -29,7 +29,34 @@
      "No test files found". That is your honest "original" number, 0/0. -->
 
 ```text
-(paste here)
+RUN  v2.1.9 /Users/isma/Desktop/se-practice/sis-04/app
+
+✓ src/booking.test.ts (19)
+  ✓ canBook validation and booking logic (19)
+    ✓ T01 - 660–720 (touching after)
+    ✓ T02 - 540–570 (starts now)
+    ✓ T03 - 720–720 (zero duration)
+    ✓ T04 - 750–720 (reversed)
+    ✓ T05 - 1380–1441 (past day end)
+    ✓ T06 - 720–840 (120 minutes)
+    ✓ T07 - 720–841 (121 minutes)
+    ✓ T08 - 570–600 (touching before)
+    ✓ T09 - 630–690 (partial overlap)
+    ✓ T10 - 570–690 (contains booking)
+    ✓ T11 - 615–645 (inside booking)
+    ✓ T12 - 600–660 (identical interval)
+    ✓ T13 - 660–720, blocked = true
+    ✓ T14 - 630–690, bookings = []
+    ✓ AC5 - 660–720, compare bookings before and after
+    ✓ X1 - 1320–1440
+    ✓ X2 - 0–60, now = 540
+    ✓ X3 - request overlaps the second of multiple bookings
+    ✓ X4 - reversed existing booking does not overlap 660–720
+
+Test Files  1 passed (1)
+     Tests  19 passed (19)
+  Start at  14:04:04
+  Duration  167ms (transform 17ms, setup 0ms, collect 13ms, tests 2ms, environment 0ms, prepare 46ms)
 ```
 
 ## 2. Context for the assistant
@@ -40,7 +67,22 @@
      they do. A tree is fine:  src/App.tsx — the page, holds the rooms and the form … -->
 
 ```text
-(paste here)
+sis-04/
+├── app/
+│   ├── src/
+│   │   ├── App.tsx          — React UI, room catalog, time inputs, room selection and availability feedback.
+│   │   ├── booking.ts       — canBook() function implementing the booking rules.
+│   │   ├── booking.test.ts  — 19 existing Vitest tests.
+│   │   ├── index.css        — Application styling.
+│   │   └── main.tsx         — React entry point.
+│   ├── package.json         — Dependencies and scripts.
+│   └── package-lock.json    — Dependency lock file.
+├── report.md                — SIS 04 report and analysis.
+├── AI_USAGE.md              — AI interaction documentation.
+├── diagrams/                — Architecture diagrams before and after refactoring.
+├── evidence/                — Screenshots demonstrating functionality.
+├── tests/                   — SIS validation scripts.
+└── submission.yml           — Submission declaration.
 ```
 
 ### 2.2 The context message as sent
@@ -49,7 +91,55 @@
      (no login, payments, live APIs or database; fictional data only). Unedited. -->
 
 ```text
-(paste here)
+I am working on SIS #04: AI-Assisted Software Evolution, Refactoring and Quality Improvement.
+
+My starting point is the Week 07 Smart Campus Room Availability Checker, written in TypeScript, React and Vite.
+
+Repository map:
+
+* app/src/App.tsx — React UI, room catalog, time inputs, room selection and availability feedback.
+* app/src/booking.ts — canBook() function implementing the booking rules.
+* app/src/booking.test.ts — 19 existing Vitest tests.
+* app/src/index.css — application styling.
+* app/src/main.tsx — React entry point.
+* app/package.json — dependencies and scripts.
+
+Existing requirements (AC1–AC6):
+
+* AC1: Time values must be valid integer minutes between 0 and 1440, start must be before end, and start must be after now.
+* AC2: Booking duration cannot exceed 120 minutes.
+* AC3: Blocked rooms must be unavailable.
+* AC4: Bookings must not overlap existing bookings. Touching endpoints are allowed.
+* AC5: Availability checks must not modify existing bookings.
+* AC6: The UI must provide clear feedback and remain responsive.
+
+New requirements (F1–F5):
+
+* F1: Room capacity must be greater than or equal to the requested number of attendees.
+* F2: A room must contain ALL selected equipment.
+* F3: Blocked rooms must never be reported as available.
+* F4: The UI must display a clear empty state when no rooms match the filters.
+* F5: Changing the selected room must refresh the availability result, and the check must use that room’s own bookings.
+
+Constraints:
+
+* At least four fictional rooms.
+* No login, payments, live APIs or database.
+* Preserve the existing AC1–AC6 behavior.
+* Use the required modules: rooms.ts, filter.ts, booking.ts and App.tsx.
+* Keep canBook() behavior unchanged.
+* Use real modules in automated tests without mocks.
+* Make small, verifiable changes and run the full test suite after each change.
+
+Baseline:
+
+* Commit: 01900fe
+* Vitest: 19 tests passed.
+* Production build: successful.
+
+Please analyze my existing code, identify at least three concrete maintainability risks with evidence, propose a numbered improvement plan, and explain one AI suggestion that should be rejected or modified to preserve the requirements.
+
+Do not implement or modify code yet.
 ```
 
 ## 3. Codebase analysis (Task 1)
@@ -62,24 +152,30 @@
 
 | # | Risk | Where (file / function) | Evidence | Priority |
 | --- | --- | --- | --- | --- |
-| 1 | (write here) | (write here) | (write here) | High / Medium / Low |
-| 2 | (write here) | (write here) | (write here) | High / Medium / Low |
-| 3 | (write here) | (write here) | (write here) | High / Medium / Low |
+| 1 | Room data is tightly coupled with the UI| src/App.tsx, ROOMS | The room catalog is declared directly inside App.tsx. It contains only two rooms and has no capacity or equipment properties required by F1 and F2. | High |
+| 2 | Room blocking logic is inconsistent | src/App.tsx, check() | The application uses a separate blocked checkbox instead of room.blocked. A blocked room could be reported available if the checkbox is unchecked, violating AC3 and F3. | High |
+| 3 | Switching rooms leaves an outdated availability result | src/App.tsx, setRoomId() | The room selector updates roomId but does not reset result. The UI can display the previous room’s availability after switching, violating F5. | High |
+| 4 | Booking orchestration is mixed with UI logic | src/App.tsx, check() | The check function converts time inputs, performs validation and directly calls canBook() with room bookings. There is no reusable checkRoom() function. | Medium |
 
 ### 3.2 Improvement plan — before editing
 
 <!-- Numbered, in the order you will do it, smallest safe step first. Written BEFORE you change
      code: the commit that adds this section comes before the commit that changes app/src. -->
 
-1. (write here)
-2. (write here)
-3. (write here)
+1. Preserve the existing canBook() implementation and all 19 baseline tests to ensure AC1–AC5 remain unchanged.
+2. Create rooms.ts with a shared Room type and at least four fictional rooms containing capacity, equipment, blocked status and individual bookings.
+3. Write tests for F1 and F2, then implement filterRooms() in filter.ts to check room capacity and require all selected equipment.
+4. Write tests for F3 and F5, then implement checkRoom() in booking.ts using the selected room’s blocked status and bookings.
+5. Refactor App.tsx to import the room catalog and filtering functions, add attendee and equipment filters, display an empty state and reset outdated results when the selected room changes.
+6. Run the complete Vitest suite after each implementation change and verify that AC1–AC6 and F1–F5 work correctly.
+7. Create before and after architecture diagrams, collect five required screenshots and document the design decisions and removed duplication.
+8. Measure the original and final code quality, document AI interactions and complete the final report and submission validation.
 
 ### 3.3 One AI suggestion I rejected or modified
 
 | Suggestion (as the assistant made it) | Decision | Why — with the AC, F-rule, test or file behind it |
 | --- | --- | --- |
-| (write here) | Rejected / Modified | (write here) |
+| Replace the independent blocked checkbox in App.tsx with the selected room’s blocked property. | Modified | Directly replacing the checkbox would fix the inconsistency but leave room-specific booking decisions inside the UI. Instead, I will introduce checkRoom() in booking.ts, which passes the selected room’s blocked status and bookings to canBook(). This preserves AC3, satisfies F3 and F5, and separates business logic from the UI.|
 
 ## 4. Feature extension (Task 2)
 
