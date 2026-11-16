@@ -1,5 +1,17 @@
-' diagrams/after.puml — the same view of your FINAL code. It must show rooms, booking, filter
-' and the UI (App and any components), with an arrow for each import. Replace this stub.
-'
 @startuml
+title Final: separated room catalog, filtering, booking and UI
+component "React UI\nApp.tsx" as UI
+component "Room catalog\nrooms.ts" as Rooms
+component "Filtering\nfilter.ts" as Filter
+component "Availability rules\nbooking.ts" as Booking
+UI --> Rooms : ROOMS
+UI --> Filter : filterRooms()
+UI --> Booking : checkRoom()
+Filter --> Rooms : Room type
+Booking --> Rooms : Room type
+Booking --> Booking : checkRoom calls canBook
+note right of UI
+  UI renders matching rooms and feedback;
+  rules live in reusable functions.
+end note
 @enduml

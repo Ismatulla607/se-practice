@@ -12,3 +12,13 @@ button { margin-top: 1rem; padding: 0.6rem 1.2rem; border: 0; border-radius: 8px
   .page { margin: 0; border-radius: 0; }
   .row { flex-direction: column; }
 }
+
+.page { box-sizing: border-box; }
+.row label { min-width: 0; }
+.row input:not([type="checkbox"]), .row select { box-sizing: border-box; max-width: 100%; padding: 0.4rem; }
+button { cursor: pointer; }
+@media (max-width: 480px) {
+  .page { padding: 1rem; }
+  .row label { width: 100%; }
+  .row label.inline { width: auto; }
+}

@@ -1,35 +1,25 @@
 # AI Usage Disclosure — SIS #04
 
-Required by the course academic policy (Generative AI use level **D — AI-integrated**).
-You are responsible for the accuracy, testing and integrity of everything you submit,
-including anything an AI tool produced.
+Generative AI use level D. All source changes, prompts and verifications are disclosed in `report.md` §8.
 
-| Tool | Exact model / plan | Date | Used for | Which files it touched |
+| Tool | Exact model / plan | Date | Used for | Files |
 | --- | --- | --- | --- | --- |
-| | | | codebase analysis (Task 1) | |
-| | | | improvement plan | |
-| | | | feature extension (Task 2) | |
-| | | | refactoring (Task 3) | |
-| | | | tests (Task 4) | |
+| ChatGPT | GPT-6 | 2026-11-16 | Baseline analysis and plan | `report.md` §2–3 |
+| ChatGPT | GPT-6 | 2026-11-16 | Room catalog and test-first filtering | `app/src/rooms.ts`, `filter.ts`, `filter.test.ts` |
+| ChatGPT | GPT-6 | 2026-11-16 | Room booking wrapper and UI | `booking.ts`, `booking.test.ts`, `App.tsx` |
+| ChatGPT | GPT-6 | 2026-11-16 | Submission preparation, diagrams, test IDs and documentation | `report.md`, `diagrams/`, `app/README.md`, `AI_USAGE.md` |
 
-<!-- Delete rows you did not use the assistant for; add rows for anything else. The optional
-     extension (an existing skill or a read-only MCP server) goes here too, with its permissions. -->
+**The assistant wrote, or helped write, tests in `app/`:** yes. Test expectations are based on AC1–AC5, F1–F5, and B1–B6, not derived from function output. F4 and INT tests were added after the user's last verified 26-test run and require rerunning.
 
-**The assistant wrote, or helped write, tests in `app/`:** yes / no
-<!-- Either answer is allowed. If "yes": which tests, and how you checked that their EXPECTED values
-     come from AC1–AC5 and F1–F5, not from what the code happens to return. -->
+**Every run pasted in report.md was produced by my code on my machine (or Codespace), unedited:** yes for the 19- and 26-test runs shown; the final 28-test run has not yet been pasted.
 
-**Every run pasted in report.md was produced by my code on my machine (or Codespace), unedited:** yes / no
+**Every number in report.md section 7 was measured the way its row says:** baseline and last confirmed figures are measured; the 28-test state is explicitly marked pending.
 
-**Every number in report.md section 7 was measured the way its row says:** yes / no
+**I shared no credentials, keys or private data with any tool:** confirm personally before submitting.
 
-**I shared no credentials, keys or private data with any tool:** yes / no
+**Everything I submitted, I can explain and defend in class:** confirm personally after reviewing the source.
 
-**Everything I submitted, I can explain and defend in class — including filterRooms, checkRoom and
-why each module exists:** yes / no
+**Anything I accepted from AI without fully understanding it:** review the final changes before declaring none.
 
-**Anything I accepted from the AI without fully understanding it:**
-<!-- Name the file and the line. An honest entry here costs far less than a blank one that turns out to be untrue. -->
-
-Signed: <your name>
-Date:
+Signed: [student to confirm]  
+Date: 2026-11-16
