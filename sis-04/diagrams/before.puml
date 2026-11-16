@@ -1,0 +1,14 @@
+@startuml
+title Baseline: Week 07 application
+component "React UI\nApp.tsx" as App
+component "Booking rules\nbooking.ts" as Booking
+component "Local room array\ninside App.tsx" as LocalRooms
+component "Time input and result\ninside App.tsx" as Form
+App --> Booking : canBook()
+App --> LocalRooms : room lookup
+App --> Form : inputs / result
+note bottom of App
+  Room data and blocked checkbox lived in the UI.
+  Switching rooms did not clear the result.
+end note
+@enduml

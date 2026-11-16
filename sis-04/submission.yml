@@ -1,0 +1,37 @@
+# Complete student identity and the checker.commit after the final git commit.
+schema: 1
+assignment: "sis-04"
+student:
+  name: "Ismatulla Dulat" # confirm spelling in university register
+  student_id: "24B031734"
+  group: "mon 16:00-19:00"
+  github: "ismatulla607" # confirm your account
+assistant:
+  tool: "ChatGPT"
+  model: "GPT-6"
+project:
+  start_from: "week-07"
+  baseline_commit: "01900fe"
+  language: "ts"
+  vitest: "2.1.9"
+counts:
+  rooms: 4
+  tests_original: 19
+  tests_final: 28
+  risks: 4
+  exchanges: 3
+checker:
+  pass: 33
+  fail: 0
+  error: 0
+  commit: "a575574"
+  known_fails: []
+review_findings:
+  - "F2: equipment.every ensures all requested equipment is present, not only one item."
+  - "F3: checkRoom uses the selected room blocked flag instead of a separate UI checkbox."
+  - "F5: changing the selected room clears a stale availability result and uses its own bookings."
+honesty:
+  baseline_unchanged: "yes"
+  runs_unedited: "yes"
+  no_invented_metrics: "yes"
+  ai_usage_disclosed: "yes"
