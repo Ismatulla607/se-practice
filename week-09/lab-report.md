@@ -173,7 +173,12 @@ AC1: the schema enforces integer minutes within 0–1440, but cannot compare `st
 
 ## 7. Checkpoint
 
-A real local checkpoint was created in this generated folder: `5706579` (`git log --oneline`). It is **not** a commit in my `se-practice` GitHub repository. After copying into the real repository, I must create and record a new checkpoint SHA there before permitting edits. In this local folder, `git reset --hard 5706579` restores tracked files to this checkpoint and discards tracked uncommitted changes and later committed changes on the current branch; untracked files are not removed. Use only after checking `git status` and obtaining approval.
+Checkpoint SHA: `6376cb3`
+Branch: `week-09`
+Rollback command: `git reset --hard 6376cb3`
+I created this checkpoint in my se-practice repository after completing the tool definition, function calls, and documentation. The checkpoint passed 30/30 tool checks and 15/15 submission validation checks.
+The rollback command restores tracked files to commit 6376cb3. It discards uncommitted changes to tracked files and removes later commits from the current branch history. Untracked files are not deleted.
+Before running this command, I would check `git status` and ask for approval because the operation can permanently discard work.
 
 ## 8. Checker output
 
