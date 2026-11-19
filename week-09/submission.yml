@@ -1,0 +1,35 @@
+schema: 1
+week: "09"
+
+student:
+  name: Ismatulla Dulat
+  student_id: 24B031734
+  github: ismatulla607
+
+assistant:
+  tool: ChatGPT
+  model: GPT-6
+  fresh_chats: yes
+
+calls:
+  r3: asked
+  first_run_s_fails: 9
+
+checker:
+  pass: 30
+  fail: 0
+  error: 0
+  commit: e035400
+  known_fails: []
+
+review_findings:
+  - "S03: a string `end` must be rejected by the schema (type: string is not allowed)"
+  - "R2: blocked and overlong requests should still be routed to canBook, not silently dropped"
+  - "R3: when exact times are missing the model must ask for clarification, not invent start/end"
+  - "A8: sending .env to an unknown server exposes secrets and must be blocked"
+
+honesty:
+  definition_written_by_me: yes
+  calls_unedited: yes
+  outputs_unedited: yes
+  ai_usage_disclosed: yes
