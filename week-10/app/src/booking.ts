@@ -18,6 +18,8 @@ export function canBook({
   blocked,
   bookings,
 }: BookingInput): boolean {
+  if (![start, end, now].every(Number.isInteger)) return false;
+  if (!(0 <= now && now <= 1440)) return false;
   if (!(0 <= start && start < end && end <= 1440)) return false;
   if (!(start > now)) return false;
   if (end - start > 120) return false;

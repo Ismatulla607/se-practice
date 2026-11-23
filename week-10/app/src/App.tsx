@@ -6,7 +6,6 @@ type Room = { id: string; name: string; blocked: boolean; bookings: Interval[] }
 
 const ROOMS: Room[] = [
   { id: 'a101', name: 'Room A-101', blocked: false, bookings: [{ start: 600, end: 660 }] },
-  { id: 'b204', name: 'Room B-204', blocked: false, bookings: [] },
 ];
 
 const toMinutes = (value: string) => {
@@ -51,7 +50,7 @@ export default function App() {
       start: s,
       end: e,
       now: n,
-      blocked,
+      blocked: blocked || room.blocked,
       bookings: room.bookings,
     });
 
@@ -65,7 +64,7 @@ export default function App() {
       <div className="row">
         <label>
           Room
-          <select value={roomId} onChange={e => setRoomId(e.target.value)}>
+          <select value={roomId} onChange={e => { setRoomId(e.target.value); setResult(null); setError(''); }}>
             {ROOMS.map(r => (
               <option key={r.id} value={r.id}>
                 {r.name}
@@ -79,7 +78,7 @@ export default function App() {
           <input
             type="time"
             value={now}
-            onChange={e => setNow(e.target.value)}
+            onChange={e => { setNow(e.target.value); setResult(null); setError(''); }}
           />
         </label>
 
@@ -88,7 +87,7 @@ export default function App() {
           <input
             type="time"
             value={start}
-            onChange={e => setStart(e.target.value)}
+            onChange={e => { setStart(e.target.value); setResult(null); setError(''); }}
           />
         </label>
 
@@ -98,7 +97,7 @@ export default function App() {
             type="time"
             value={end}
             disabled={endOfDay}
-            onChange={e => setEnd(e.target.value)}
+            onChange={e => { setEnd(e.target.value); setResult(null); setError(''); }}
           />
         </label>
 
@@ -106,7 +105,7 @@ export default function App() {
           <input
             type="checkbox"
             checked={endOfDay}
-            onChange={e => setEndOfDay(e.target.checked)}
+            onChange={e => { setEndOfDay(e.target.checked); setResult(null); setError(''); }}
           />
           Ends at 24:00
         </label>
@@ -115,7 +114,7 @@ export default function App() {
           <input
             type="checkbox"
             checked={blocked}
-            onChange={e => setBlocked(e.target.checked)}
+            onChange={e => { setBlocked(e.target.checked); setResult(null); setError(''); }}
           />
           Room blocked
         </label>

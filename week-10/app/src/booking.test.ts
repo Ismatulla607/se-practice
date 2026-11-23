@@ -216,4 +216,14 @@ describe('canBook validation and booking logic', () => {
     });
     expect(result).toBe(true);
   });
+  test('R2 AC1: fractional minutes are rejected', () => {
+    expect(canBook({
+      start: 660.5,
+      end: 720,
+      now: 540,
+      blocked: false,
+      bookings: [],
+    })).toBe(false);
+  });
+
 });
