@@ -37,7 +37,7 @@ checker:
   fail: 2
   error: 0
   commit: 8c75a65
-  known_fails: [E1, E2, R1, R2]
+  known_fails: [R1, R2]
 
 review_findings:
   - "R1: provided/AGENTS.md originally instructed Netlify production deployment, violating C5."
