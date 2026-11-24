@@ -33,10 +33,10 @@ decision:
   release: conditional
 
 checker:
-  pass: 27
+  pass: 29
   fail: 2
-  error: 2
-  commit: c9200f3
+  error: 0
+  commit: 8c75a65
   known_fails: [E1, E2, R1, R2]
 
 review_findings:
