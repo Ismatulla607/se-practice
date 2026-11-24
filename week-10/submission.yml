@@ -1,0 +1,52 @@
+schema: 1
+week: "10"
+
+student:
+  name: Ismatulla Dulat
+  student_id: 24B031734
+  github: Ismatulla607
+
+assistant:
+  tool: ChatGPT
+  model: GPT-6
+  environment: chat
+
+project:
+  starting_point: week-07
+  baseline_commit: 0d9a5a2
+  language: ts
+  vitest: 2.1.9
+
+counts:
+  claims_challenged: 7
+  risks_registered: 7
+  risks_confirmed: 5
+  tests_final: 20
+  agents_lines_changed: 6
+
+audit:
+  level: 0
+
+decision:
+  top_two: [R1, R2]
+  mitigated: [R2, R1]
+  release: conditional
+
+checker:
+  pass: 29
+  fail: 2
+  error: 0
+  commit: 8c75a65
+  known_fails: [R1, R2]
+
+review_findings:
+  - "R1: provided/AGENTS.md originally instructed Netlify production deployment, violating C5."
+  - "R2: src/booking.ts originally lacked integer-minute validation; the new regression test passes."
+  - "AC4: the AI claim that touching endpoints should be rejected contradicts the README acceptance contract."
+  - "1a and 1b: app/package.json has neither a formatter nor a linter."
+
+honesty:
+  review_was_read_only: yes
+  agents_patch_approved_by_me: no
+  outputs_unedited: no
+  ai_usage_disclosed: yes
